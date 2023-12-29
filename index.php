@@ -31,11 +31,11 @@
 </head>
 <body>
 
- <?php include 'includes/header.php';?>
+ <?php require 'includes/header.php';?>
 
-  <?php include 'includes/main.php';?>
+  <?php require 'includes/main.php';?>
 
-  <?php include 'includes/footer.php';?>
+  <?php require 'includes/footer.php';?>
   
   
     <script src="./assets/js/bootstrap.bundle.min.js"></script>

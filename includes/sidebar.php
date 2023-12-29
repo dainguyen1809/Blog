@@ -1,3 +1,18 @@
+<?php
+    require 'admin/config/connect.php';
+    
+    $search = '';
+
+    if(isset($_GET['search'])){
+        $search = $_GET['search'];
+    }
+    
+    $sql = "select * from news
+    where title like '%$search%'";
+
+    $result = mysqli_query($conn, $sql);
+?>
+
 <div class="col-md-12 col-lg-4 sidebar">
     <div class="row">
         <select class="form-select form-select-xl mb-3" aria-label=".form-select-xl example">
@@ -6,9 +21,10 @@
         </select>
     </div>
     <div class="sidebar-box search-form-wrap">
-        <form action="#" class="sidebar-search-form">
+        <form class="sidebar-search-form">
             <span class="bi-search"></span>
-            <input type="text" class="form-control" id="s" placeholder="Nhập nội dung tìm kiếm...">
+            <input name="search" type="text" class="form-control" id="" placeholder="Nhập nội dung tìm kiếm..."
+                value="<?php echo $search?>">
         </form>
     </div>
     <!-- END sidebar-box -->
@@ -17,17 +33,19 @@
         <h3 class="heading">Bài viết phổ biến</h3>
         <div class="post-entry-sidebar">
             <ul>
+                <?php foreach($result as $each){?>
                 <li>
                     <a href="detail.php">
-                        <img src="assets/images/img_1_sq.jpg" alt="Image placeholder" class="me-4 rounded">
+                        <img src="<?php echo $each['photos'];?>" alt="Image placeholder" class="me-4 rounded">
                         <div class="text">
-                            <h4>There’s a Cool New Way for Men to Wear Socks and Sandals</h4>
+                            <h4><?php echo $each['title'];?></h4>
                             <div class="post-meta">
-                                <span class="mr-2">March 15, 2018 </span>
+                                <span class="mr-2"><?php echo date('d-m-Y', strtotime($each['date']));?></span>
                             </div>
                         </div>
                     </a>
                 </li>
+                <?php }?>
             </ul>
         </div>
     </div>

@@ -34,7 +34,33 @@
 <body>
     <?php 
         require 'config/connect.php';
-        $sql = "select * from news";
+        
+        $pages = 1;
+        
+        if(isset($_GET['pages'])){
+            $pages = $_GET['pages'];
+        }
+
+        $search = '';
+        if(isset($_GET['search'])){
+            $search = $_GET['search'];
+        }
+        
+        $sql_num_news = "select count(*) from news where title like '%$search%'";
+        $array_num_news= mysqli_query($conn, $sql_num_news);
+        $result_num_news = mysqli_fetch_array($array_num_news);
+        $num_news = $result_num_news['count(*)'];
+        
+        $num_news_on_pages = 2;
+        
+        $num_pages = ceil($num_news / $num_news_on_pages);
+
+        $skip_pages =$num_news_on_pages * ($pages - 1);
+
+
+        $sql = "select * from news
+            where title like '%$search%'
+            limit $num_news_on_pages offset $skip_pages";
         
         $result = mysqli_query($conn, $sql);
     ?>
@@ -50,10 +76,28 @@
 
     <div class="container p-4">
         <div class="row">
-            <h4><a class="btn btn-primary" href="forms/form_insert.php">Thêm bài viết <i
-                        class="bi bi-pencil-square"></i></a></h4>
+            <div class="col-sm-2">
+                <h4>
+                    <a class="btn btn-primary" href="../index.php">Trang Chủ <i class="bi bi-house-fill"></i></a>
+                </h4>
+            </div>
+            <div class="col-sm-2">
+                <h4>
+                    <a class="btn btn-primary" href="forms/form_insert.php">Thêm bài viết <i
+                            class="bi bi-plus-circle"></i></a>
+                </h4>
+            </div>
+            <div class="col-sm-3">
+                <div class="sidebar-box search-form-wrap">
+                    <form class="sidebar-search-form">
+                        <span class="bi-search"></span>
+                        <input name="search" type="text" class="form-control" id=""
+                            placeholder="Nhập nội dung tìm kiếm..." value="<?php echo $search?>">
+                    </form>
+                </div>
+            </div>
         </div>
-        <table class="table table-bordered border-primary text-center">
+        <table class=" table table-bordered border-primary text-center">
             <thead>
                 <tr>
                     <th scope="col">Tiêu Đề</th>
@@ -67,24 +111,44 @@
                 <?php foreach ($result as $each){ ?>
                 <tr>
                     <td>
-                        <h4>
-                            <a class="text-dark" href="detail.php?id=<?php echo $each['id']?>">
-                                <?php echo $each['title']?>
+                        <h5>
+                            <a class="text-dark" href="detail.php?id=<?php echo $each['id'];?>">
+                                <?php echo $each['title'];?>
                             </a>
-                        </h4>
+                        </h5>
                     </td>
                     <td>
-                        <?php echo $each['date']?>
+                        <?php echo $each['date'];?>
                     </td>
                     <td>
-                        <img src="<?php echo $each['photos']?>" alt="Ảnh minh họa" height="150">
+                        <img src="<?php echo $each['photos'];?>" alt="Ảnh minh họa" height="150">
                     </td>
-                    <td></td>
-                    <td></td>
+                    <td>
+                        <a class="btn btn-warning" href="forms/form_uppdate.php?id=<?php echo $each['id'];?>">Sửa <i
+                                class="bi bi-pencil-square"></i></a>
+                    </td>
+                    <td>
+                        <a class="btn btn-danger" href="forms/form_delete.php?id=<?php echo $each['id'];?>">Xóa <i
+                                class="bi bi-trash"></i></a>
+                    </td>
                 </tr>
                 <?php }?>
             </tbody>
         </table>
+
+
+        <div class="row text-start pt-5 border-top">
+            <div class="col-md-12">
+                <div class="custom-pagination">
+                    <?php for($i = 1; $i <= $num_pages; $i++){?>
+                    <a href="?pages=<?php echo $i?>&search=<?php echo $search?>">
+                        <?php echo $i?>
+                    </a>
+                    <?php }?>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 

@@ -19,44 +19,42 @@
                 </div> <!-- /.widget -->
             </div>
 
-            <!-- <div class="col-lg-4 ps-lg-5">
-          <div class="widget">
-            <h3 class="mb-4">Company</h3>
-            <ul class="list-unstyled float-start links">
-              <li><a href="#">About us</a></li>
-              <li><a href="#">Services</a></li>
-              <li><a href="#">Vision</a></li>
-              <li><a href="#">Mission</a></li>
-              <li><a href="#">Terms</a></li>
-              <li><a href="#">Privacy</a></li>
-            </ul>
-            <ul class="list-unstyled float-start links">
-              <li><a href="#">Partners</a></li>
-              <li><a href="#">Business</a></li>
-              <li><a href="#">Careers</a></li>
-              <li><a href="#">Blog</a></li>
-              <li><a href="#">FAQ</a></li>
-              <li><a href="#">Creative</a></li>
-            </ul>
-          </div>
-        </div>  -->
-
             <div class="col-lg-4 container">
                 <div class="widget">
                     <h3 class="mb-4">Bài đăng gần đây</h3>
                     <div class="post-entry-footer">
                         <ul>
+                            <?php
+                                require 'admin/config/connect.php';
+
+                                $sql = "select * from news";
+                                $result = mysqli_query($conn, $sql);
+
+                                // Số lượng bài viết bạn muốn hiển thị
+                                $numberOfPostsToShow = 3;
+                                $count = 0;
+                            ?>
+
+                            <?php foreach ($result as $each) : ?>
+                            <?php if ($count < $numberOfPostsToShow) : ?>
                             <li>
-                                <a href="">
-                                    <img src="/assets/images/img_1_sq.jpg" alt="Image placeholder" class="me-4 rounded">
+                                <a href="../detail.php">
+                                    <img src="<?php echo $each['photos']; ?>" alt="Image placeholder"
+                                        class="me-4 rounded">
                                     <div class="text">
-                                        <h4>There’s a Cool New Way for Men to Wear Socks and Sandals</h4>
+                                        <h4><?php echo $each['title']; ?></h4>
                                         <div class="post-meta">
-                                            <span class="mr-2">March 15, 2018 </span>
+                                            <span
+                                                class="mr-2"><?php echo date('d-m-Y', strtotime($each['date'])); ?></span>
                                         </div>
                                     </div>
                                 </a>
                             </li>
+                            <?php
+                                $count++;
+                                endif;
+                            ?>
+                            <?php endforeach; ?>
                         </ul>
                     </div>
 

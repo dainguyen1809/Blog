@@ -68,7 +68,7 @@
     <div class="container">
         <div class="row align-items-center justify-content-center text-center p-3">
             <div class="col-lg-6">
-                <h1 class="heading" data-aos="fade-up"><a href="../index.php" class="text-light">NHD - Blog</a></h1>
+                <h1 class="heading" data-aos="fade-up"><a href="index.php" class="text-light">NHD - Blog</a></h1>
             </div>
         </div>
     </div>
